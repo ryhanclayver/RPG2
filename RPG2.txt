@@ -102,7 +102,7 @@ public:
                 personagem1->adicionarDanoCausado(danospersonagem1);
             }
             else {
-                cout << "O ataque de " << personagem1->getNome() << " não causou dano a " << personagem2->getNome() << "." << endl;
+                cout << "O ataque de " << personagem1->getNome() << " nÃ£o causou dano a " << personagem2->getNome() << "." << endl;
             }
             if (danospersonagem2 > 0) {
                 personagem1->receberDano(danospersonagem2);
@@ -110,7 +110,7 @@ public:
                 personagem2->adicionarDanoCausado(danospersonagem2);
             }
             else {
-                cout << "O ataque de " << personagem2->getNome() << " não causou dano a " << personagem1->getNome() << "." << endl;
+                cout << "O ataque de " << personagem2->getNome() << " nÃ£o causou dano a " << personagem1->getNome() << "." << endl;
             }
 
             if (rounds == 10 || personagem1->getPV() <= 0 || personagem2->getPV() <= 0) {
@@ -187,7 +187,7 @@ private:
 
 
 class Mago : public Personagem { // causar dano alto (maior que o bruxo pra compensar que ele nao se cura)
-//Explosão arcana - explosão de dano
+//ExplosÃ£o arcana - explosÃ£o de dano
 public:
     Mago()
         : Personagem(gerarNomeAleatorio(), "Mago", gerarPV(), gerarPA(), gerarPD()) {}
@@ -247,7 +247,7 @@ private:
 };
 
 class Clerigo : public Personagem { // se cura
-//Ascensão celestial - cura em si
+//AscensÃ£o celestial - cura em si
 public:
     Clerigo()
         : Personagem(gerarNomeAleatorio(), "Clerigo", gerarPV(), gerarPA(), gerarPD()) {}
@@ -345,7 +345,7 @@ int main() {
         }
     }
 
-    // Atualizando participantes para a próxima fase  
+    // Atualizando participantes para a prÃ³xima fase  
     participantes.clear();
     for (Personagem* vencedor : vencedores) {
         vencedor->resetarAtributos();
@@ -356,7 +356,7 @@ int main() {
 
     // Exibindo o vencedor final
     cout << "\n------ VENCEDOR FINAL ------\n";
-    cout << "O grande vencedor é: " << participantes[0]->getNome() << "!\n";
+    cout << "O grande vencedor Ã©: " << participantes[0]->getNome() << "!\n";
 
     return 0;
 }
