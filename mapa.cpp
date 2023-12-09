@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <conio.h>
 
 using namespace std;
 
@@ -8,10 +9,16 @@ const int linhas = 24;
 const int colunas = 36;
 
 // Função para imprimir o mapa
-void imprimirMapa(const vector<vector<char>>& mapa) {
+void imprimirMapa(const vector<vector<char>>& mapa, int playerPosI, int playerPosJ) {
+    system("cls");
+
     for (int i = 0; i < linhas; ++i) {
         for (int j = 0; j < colunas; ++j) {
-            cout << mapa[i][j] << " ";
+            if (i == playerPosI && j == playerPosJ) {
+                cout << 'P' << " ";
+            } else {
+                cout << mapa[i][j] << " ";
+            }
         }
         cout << endl;
     }
@@ -90,8 +97,41 @@ int main() {
     // Criando um caminho dentro do labirinto da entrada até a saída
     criarCaminhoPrincipal(mapa);
 
-    // Imprimindo o mapa
-    imprimirMapa(mapa);
+    int playerPosI = 1;
+    int playerPosJ = 1;
+
+    while (true) {
+        imprimirMapa(mapa, playerPosI, playerPosJ);
+
+        // Capturar tecla de seta
+        int tecla = _getch();
+
+        // Mover o jogador
+        switch (tecla) {
+            case 72: // Tecla de seta para cima
+                if (playerPosI > 1 && mapa[playerPosI - 1][playerPosJ] != '1') {
+                    playerPosI--;
+                }
+                break;
+            case 80: // Tecla de seta para baixo
+                if (playerPosI < linhas - 2 && mapa[playerPosI + 1][playerPosJ] != '1') {
+                    playerPosI++;
+                }
+                break;
+            case 75: // Tecla de seta para a esquerda
+                if (playerPosJ > 1 && mapa[playerPosI][playerPosJ - 1] != '1') {
+                    playerPosJ--;
+                }
+                break;
+            case 77: // Tecla de seta para a direita
+                if (playerPosJ < colunas - 2 && mapa[playerPosI][playerPosJ + 1] != '1') {
+                    playerPosJ++;
+                }
+                break;
+            default:
+                break;
+        }
+    }
 
     return 0;
 }
