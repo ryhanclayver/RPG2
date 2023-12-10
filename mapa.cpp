@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <conio.h>
+#include <windows.h>
 
 using namespace std;
 
@@ -60,16 +61,16 @@ void criarCaminhosExtras(vector<vector<char>>& mapa) {
 
 // Função para criar um caminho dentro do labirinto da entrada até a saída
 void criarCaminhoPrincipal(vector<vector<char>>& mapa) {
-    for (int i = 1; i < linhas - 2; ++i) {
+    for (int i = 1; i < linhas - 1; ++i) {
         mapa[i][1] = ' ';
+    }
+
+    for (int i = 1; i < linhas - 1; ++i) {
+        mapa[i][colunas - 2] = ' ';
     }
 
     for (int j = 2; j < colunas - 2; ++j) {
         mapa[linhas / 2][j] = ' ';
-    }
-
-    for (int i = linhas / 2; i < linhas - 2; ++i) {
-        mapa[i][colunas - 2] = ' ';
     }
 }
 
