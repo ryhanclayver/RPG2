@@ -75,6 +75,9 @@ void criarCaminhoPrincipal(vector<vector<char>>& mapa) {
 }
 
 int main() {
+    // Definindo a codificação de caracteres para UTF-8
+    SetConsoleOutputCP(CP_UTF8);
+    
     // Inicializando o mapa preenchendo todo o labirinto com '1'
     vector<vector<char>> mapa(linhas, vector<char>(colunas, '1'));
 
@@ -101,38 +104,43 @@ int main() {
     int playerPosI = 1;
     int playerPosJ = 1;
 
-    while (true) {
-        imprimirMapa(mapa, playerPosI, playerPosJ);
+while (true) {
+    imprimirMapa(mapa, playerPosI, playerPosJ);
 
-        // Capturar tecla de seta
-        int tecla = _getch();
+    // Capturar tecla de seta
+    int tecla = _getch();
 
-        // Mover o jogador
-        switch (tecla) {
-            case 72: // Tecla de seta para cima
-                if (playerPosI > 1 && mapa[playerPosI - 1][playerPosJ] != '1') {
-                    playerPosI--;
-                }
-                break;
-            case 80: // Tecla de seta para baixo
-                if (playerPosI < linhas - 2 && mapa[playerPosI + 1][playerPosJ] != '1') {
-                    playerPosI++;
-                }
-                break;
-            case 75: // Tecla de seta para a esquerda
-                if (playerPosJ > 1 && mapa[playerPosI][playerPosJ - 1] != '1') {
-                    playerPosJ--;
-                }
-                break;
-            case 77: // Tecla de seta para a direita
-                if (playerPosJ < colunas - 2 && mapa[playerPosI][playerPosJ + 1] != '1') {
-                    playerPosJ++;
-                }
-                break;
-            default:
-                break;
-        }
+    // Mover o jogador
+    switch (tecla) {
+        case 72: // Tecla de seta para cima
+            if (playerPosI > 1 && mapa[playerPosI - 1][playerPosJ] != '1') {
+                playerPosI--;
+            }
+            break;
+        case 80: // Tecla de seta para baixo
+            if (playerPosI < linhas - 2 && mapa[playerPosI + 1][playerPosJ] != '1') {
+                playerPosI++;
+            }
+            break;
+        case 75: // Tecla de seta para a esquerda
+            if (playerPosJ > 1 && mapa[playerPosI][playerPosJ - 1] != '1') {
+                playerPosJ--;
+            }
+            break;
+        case 77: // Tecla de seta para a direita
+            if (playerPosJ < colunas - 2 && mapa[playerPosI][playerPosJ + 1] != '1') {
+                playerPosJ++;
+            }
+            break;
+        default:
+            break;
     }
 
+    // Verificar se o jogador chegou à saída
+    if (playerPosI == linhas - 2 && playerPosJ == colunas - 2) {
+        cout << "Parabéns! Você saiu do labirinto e ganhou o jogo!" << endl;
+        break; // Encerrar o loop se o jogador venceu
+    }
+}
     return 0;
 }
