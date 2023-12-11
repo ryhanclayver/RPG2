@@ -175,29 +175,16 @@ void iniciarCombate(Personagem* personagem1, Personagem* personagem2) {
             cout << "\n\t\tO combate terminou!\n" << endl;
             break;
         }
+        system("pause");
     }
 
     if (personagem1->getPV() <= 0 && personagem2->getPV() > 0) {
         cout << "\t\t" << personagem2->getNome() << " venceu!" << endl;
+        system("pause");  
     }
     else if (personagem2->getPV() <= 0 && personagem1->getPV() > 0) {
         cout << "\t\t" << personagem1->getNome() << " venceu!" << endl;
-    }
-    else {
-        int ataquePersonagem1 = personagem1->getPA();
-        int ataquePersonagem2 = personagem2->getPA();
-        int vidaPersonagem1 = personagem1->getPV();
-        int vidaPersonagem2 = personagem2->getPV();
-
-        if (ataquePersonagem1 > ataquePersonagem2) {
-            cout << "\t\t" << personagem1->getNome() << " venceu!" << endl;
-        }
-        else if (ataquePersonagem2 > ataquePersonagem1) {
-            cout << "\t\t" << personagem2->getNome() << " venceu!" << endl;
-        }
-        else {
-            cout << "\t" << "O combate terminou sem um vencedor claro!" << endl;
-        }
+        system("pause");  
     }
 }
 
@@ -355,6 +342,9 @@ int main() {
     SetConsoleOutputCP(CP_UTF8);
     srand(static_cast<unsigned>(time(nullptr)));
 
+    //Criando o Jogo
+    JogoRPG jogo;
+
     // Criando bosses usando as classes existentes
     Personagem* boss1 = new Clerigo("Clerigo");
     Personagem* boss2 = new Guerreiro("Guerreiro");
@@ -391,6 +381,8 @@ int main() {
     int playerPosJ = 1;
 
 while (true) {
+    system("cls");  // Limpar o terminal
+
     imprimirMapa(mapa, playerPosI, playerPosJ);
 
     // Capturar tecla de seta
@@ -427,6 +419,21 @@ while (true) {
         cout << "Parabéns! Você saiu do labirinto e ganhou o jogo!" << endl;
         break; // Encerrar o loop se o jogador venceu
     }
+
+    // Combate contra Boss
+    if (playerPosI == 12 && playerPosJ == 1) { // Posição do Boss 1 (Clerigo)
+        system("cls");  // Limpar o terminal
+        jogo.iniciarCombate(personagem1, boss1);
+    } else if (playerPosI == 12 && playerPosJ == 11) { // Posição do Boss 2 (Guerreiro)
+        system("cls");  // Limpar o terminal
+        jogo.iniciarCombate(personagem1, boss2);
+    } else if (playerPosI == 12 && playerPosJ == 23) { // Posição do Boss 3 (Ladino)
+        system("cls");  // Limpar o terminal
+        jogo.iniciarCombate(personagem1, boss3);
+    } else if (playerPosI == 12 && playerPosJ == 33) { // Posição do Boss 4 (Bruxo)
+        system("cls");  // Limpar o terminal
+        jogo.iniciarCombate(personagem1, boss4);
+    }
 }
     delete personagem1;
     delete boss1;
@@ -436,5 +443,3 @@ while (true) {
 
     return 0;
 }
-
-
