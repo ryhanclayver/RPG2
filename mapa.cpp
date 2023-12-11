@@ -57,6 +57,12 @@ void criarCaminhosExtras(vector<vector<char>>& mapa) {
     for (int j = colunas / 3; j < 2 * colunas / 3; ++j) {
         mapa[linhas / 2][j] = ' ';
     }
+
+    //Criando Boss
+    mapa[12][0] = 'C'; // Boss 1 Clerigo
+    mapa[11][11] = 'G'; // Boss 2 Guerreiro
+    mapa[11][23] = 'L'; // Boss 3 Ladino
+    mapa[11][33] = 'B'; // Boss 4 Bruxo
 }
 
 // Função para criar um caminho dentro do labirinto da entrada até a saída
@@ -144,3 +150,5 @@ while (true) {
 }
     return 0;
 }
+
+
