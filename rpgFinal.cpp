@@ -464,6 +464,7 @@ while (true) {
         cout << "Roda a maçaneta..." << endl << endl;
         cout << "A porta se abre" << endl << endl;       
         cout << "Parabéns! Você saiu do labirinto e ganhou o jogo!" << endl;
+        system("pause");
         break; // Encerrar o loop se o jogador venceu    
     }
 
