@@ -90,6 +90,7 @@ protected:
     string nome, classe;
     int pv, pa, pd, pvOriginal, paOriginal;
     int danoTotalCausado;
+    std::vector<std::string> inventario;
 
 public:
     Personagem(const string& nome, const string& classe, int pv, int pa, int pd)
@@ -104,9 +105,23 @@ public:
         }
     }
 
+    void adicionarAoInventario(const std::string& item) {
+        inventario.push_back(item);
+    }
+
+    void exibirInventario() const {
+        if (inventario.empty()) {
+            std::cout << "O inventário está vazio." << std::endl;
+        } else {
+            std::cout << "Inventário:" << std::endl;
+            for (const auto& item : inventario) {
+                std::cout << "- " << item << std::endl;
+            }
+        }
+    }
+
     void resetarAtributos() {
         pv = pvOriginal;
-        pa = paOriginal;
     }
 
     string getNome() const {
@@ -138,57 +153,62 @@ public:
 
 
 class JogoRPG {
-protected:
+    protected:
 
-public:
-    JogoRPG() {}
+    public:
+        JogoRPG() {}
 
-void iniciarCombate(Personagem* personagem1, Personagem* personagem2) {
-    int rounds = 0;
+    void iniciarCombate(Personagem* personagem1, Personagem* personagem2) {
+        int rounds = 0;
 
-    while (personagem1->getPV() > 0 && personagem2->getPV() > 0) {
-        cout << "\t\nRound: " << rounds + 1 << endl;
-        rounds++;
-        swap(personagem1, personagem2);
+        while (personagem1->getPV() > 0 && personagem2->getPV() > 0) {
+            cout << "\t\nRound: " << rounds + 1 << endl;
+            cout << "Vida de "<< personagem1->getNome()<<" :" << personagem1->getPV() << " pontos." << endl;
+            cout << "Vida de "<< personagem2->getNome()<<" :" << personagem2->getPV() << " pontos." << endl;
+            cout << endl;
+            rounds++;
 
-        int danospersonagem1 = personagem1->getPA() - personagem2->getPD();
-        int danospersonagem2 = personagem2->getPA() - personagem1->getPD();
+            int danospersonagem1 = personagem1->getPA() - personagem2->getPD();
+            int danospersonagem2 = personagem2->getPA() - personagem1->getPD();
 
-        if (danospersonagem1 > 0) {
-            personagem2->receberDano(danospersonagem1);
-            cout << "Perda de vida de " << personagem2->getNome() << ": " << danospersonagem1 << " pontos." << endl;
-            personagem1->adicionarDanoCausado(danospersonagem1);
+            if (danospersonagem1 > 0) {
+                personagem2->receberDano(danospersonagem1);
+                cout << "Perda de vida de " << personagem2->getNome() << ": " << danospersonagem1 << " pontos." << endl;
+                personagem1->adicionarDanoCausado(danospersonagem1);
+            }
+            else {
+                cout << "O ataque de " << personagem1->getNome() << " não causou dano a " << personagem2->getNome() << "." << endl;
+            }
+            if (danospersonagem2 > 0) {
+                personagem1->receberDano(danospersonagem2);
+                cout << "Perda de vida de " << personagem1->getNome() << ": " << danospersonagem2 << " pontos." << endl;
+                personagem2->adicionarDanoCausado(danospersonagem2);
+            }
+            else {
+                cout << "O ataque de " << personagem2->getNome() << " não causou dano a " << personagem1->getNome() << "." << endl;
+            }
+
+            if (personagem1->getPV() <= 0 || personagem2->getPV() <= 0) {
+                cout << "\n\t\tO combate terminou!\n" << endl;
+                break;
+            }
+            system("pause");
         }
-        else {
-            cout << "O ataque de " << personagem1->getNome() << " não causou dano a " << personagem2->getNome() << "." << endl;
-        }
-        if (danospersonagem2 > 0) {
-            personagem1->receberDano(danospersonagem2);
-            cout << "Perda de vida de " << personagem1->getNome() << ": " << danospersonagem2 << " pontos." << endl;
-            personagem2->adicionarDanoCausado(danospersonagem2);
-        }
-        else {
-            cout << "O ataque de " << personagem2->getNome() << " não causou dano a " << personagem1->getNome() << "." << endl;
-        }
 
-        if (personagem1->getPV() <= 0 || personagem2->getPV() <= 0) {
-            cout << "\n\t\tO combate terminou!\n" << endl;
-            break;
+        if (personagem1->getPV() <= 0 && personagem2->getPV() > 0) {
+            system("cls");
+            cout << "\t\t" << personagem1->getNome() << " perdeu!" << endl;
+            cout << "\t\t Game Over" << endl; 
+            system("pause"); 
+            exit(1); // Fecha o programa porque jogador perdeu
         }
-        system("pause");
+        else if (personagem2->getPV() <= 0 && personagem1->getPV() > 0) {
+            system("cls");
+            cout << "\t\t" << personagem1->getNome() << " venceu!" << endl;
+            system("pause");
+            personagem1->resetarAtributos();  // Reabastecer pontos de vida
+        }
     }
-
-    if (personagem1->getPV() <= 0 && personagem2->getPV() > 0) {
-        cout << "\t\t" << personagem2->getNome() << " venceu!" << endl;
-        system("pause");  
-    }
-    else if (personagem2->getPV() <= 0 && personagem1->getPV() > 0) {
-        cout << "\t\t" << personagem1->getNome() << " venceu!" << endl;
-        system("pause");  
-    }
-}
-
-
 };
 
 class Bruxo : public Personagem { //causar dano e se curar com metade desse dano causado
