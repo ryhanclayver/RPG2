@@ -2,7 +2,7 @@
 #include <vector>
 #include <conio.h>
 #include <windows.h>
-#include<iomanip>
+#include <iomanip>
 #include <string>
 #include <cstdlib>
 #include <ctime>
@@ -103,7 +103,7 @@ class Personagem {
 protected:
     string nome, classe;
     int pv, pa, pd, pvOriginal, paOriginal;
-    std::vector<std::string> inventario;
+    vector<string> inventario;
 
 public:
     Personagem(const string& nome, const string& classe, int pv, int pa, int pd)
@@ -118,17 +118,17 @@ public:
         }
     }
 
-    void adicionarAoInventario(const std::string& item) {
+    void adicionarAoInventario(const string& item) {
         inventario.push_back(item);
     }
 
     void exibirInventario() const {
         if (inventario.empty()) {
-            std::cout << "O inventário está vazio." << std::endl;
+            cout << "O inventário está vazio." << endl;
         }else {
-            std::cout << "Você vê:" << std::endl;
+            cout << "Você vê:" << endl;
             for (const auto& item : inventario) {
-                std::cout << "- " << item << std::endl;
+                cout << "- " << item << endl;
             } 
             cout << "Você encontrou " << inventario.size() <<"/10 dos itens disponíveis" << endl;
         }
