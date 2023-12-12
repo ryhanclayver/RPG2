@@ -1,12 +1,90 @@
-#include<iostream>
+#include <iostream>
+#include <vector>
+#include <conio.h>
+#include <windows.h>
 #include<iomanip>
 #include <string>
-#include <vector>
 #include <cstdlib>
 #include <ctime>
 
 using namespace std;
 
+// Definindo o tamanho do mapa
+const int linhas = 24;
+const int colunas = 36;
+
+// Função para imprimir o mapa
+void imprimirMapa(const vector<vector<char>>& mapa, int playerPosI, int playerPosJ) {
+    system("cls");
+
+    for (int i = 0; i < linhas; ++i) {
+        for (int j = 0; j < colunas; ++j) {
+            if (i == playerPosI && j == playerPosJ) {
+                cout << 'P' << " ";
+            } else {
+                cout << mapa[i][j] << " ";
+            }
+        }
+        cout << endl;
+    }
+}
+
+// Função para criar caminhos dentro do labirinto que não levam à saída
+void criarCaminhosExtras(vector<vector<char>>& mapa) {
+    // Caminho 1
+    for (int i = 1; i < linhas / 3; ++i) {
+        mapa[i][colunas / 3] = ' ';
+    }
+
+    // Caminho 2
+    for (int i = linhas / 3; i < 2 * linhas / 3; ++i) {
+        mapa[i][2 * colunas / 3] = ' ';
+    }
+
+    // Caminho 3
+    for (int j = colunas / 3; j < 2 * colunas / 3; ++j) {
+        mapa[2 * linhas / 3][j] = ' ';
+    }
+
+    // Conectando os caminhos
+    for (int i = linhas / 3; i < 2 * linhas / 3; ++i) {
+        mapa[i][colunas / 3] = ' ';
+        mapa[i][2 * colunas / 3] = ' ';
+    }
+
+    // Caminho 4
+    for (int j = 1; j < 12; ++j) {
+        mapa[linhas / 2][j] = ' ';
+    }
+
+    // Conectando os caminhos
+    for (int j = colunas / 3; j < 2 * colunas / 3; ++j) {
+        mapa[linhas / 2][j] = ' ';
+    }
+
+    //Criando Boss
+    mapa[12][0] = 'C'; // Boss 1 Clerigo
+    mapa[11][11] = 'G'; // Boss 2 Guerreiro
+    mapa[11][23] = 'L'; // Boss 3 Ladino
+    mapa[11][33] = 'B'; // Boss 4 Bruxo
+}
+
+// Função para criar um caminho dentro do labirinto da entrada até a saída
+void criarCaminhoPrincipal(vector<vector<char>>& mapa) {
+    for (int i = 1; i < linhas - 1; ++i) {
+        mapa[i][1] = ' ';
+    }
+
+    for (int i = 1; i < linhas - 1; ++i) {
+        mapa[i][colunas - 2] = ' ';
+    }
+
+    for (int j = 2; j < colunas - 2; ++j) {
+        mapa[linhas / 2][j] = ' ';
+    }
+}
+
+// Classe de Personagem
 class Personagem {
 protected:
     string nome, classe;
@@ -28,7 +106,6 @@ public:
 
     void resetarAtributos() {
         pv = pvOriginal;
-        pa = paOriginal;
     }
 
     string getNome() const {
@@ -58,71 +135,64 @@ public:
     }
 };
 
+
 class JogoRPG {
-protected:
+    protected:
 
-public:
-    JogoRPG() {}
+    public:
+        JogoRPG() {}
 
-void iniciarCombate(Personagem* personagem1, Personagem* personagem2) {
-    int rounds = 0;
+    void iniciarCombate(Personagem* personagem1, Personagem* personagem2) {
+        int rounds = 0;
 
-    while (personagem1->getPV() > 0 && personagem2->getPV() > 0) {
-        cout << "\t\nRound: " << rounds + 1 << endl;
-        rounds++;
-        swap(personagem1, personagem2);
+        while (personagem1->getPV() > 0 && personagem2->getPV() > 0) {
+            cout << "\t\nRound: " << rounds + 1 << endl;
+            cout << "Vida de "<< personagem1->getNome()<<" :" << personagem1->getPV() << " pontos." << endl;
+            cout << "Vida de "<< personagem2->getNome()<<" :" << personagem2->getPV() << " pontos." << endl;
+            cout << endl;
+            rounds++;
 
-        int danospersonagem1 = personagem1->getPA() - personagem2->getPD();
-        int danospersonagem2 = personagem2->getPA() - personagem1->getPD();
+            int danospersonagem1 = personagem1->getPA() - personagem2->getPD();
+            int danospersonagem2 = personagem2->getPA() - personagem1->getPD();
 
-        if (danospersonagem1 > 0) {
-            personagem2->receberDano(danospersonagem1);
-            cout << "Perda de vida de " << personagem2->getNome() << ": " << danospersonagem1 << " pontos." << endl;
-            personagem1->adicionarDanoCausado(danospersonagem1);
+            if (danospersonagem1 > 0) {
+                personagem2->receberDano(danospersonagem1);
+                cout << "Perda de vida de " << personagem2->getNome() << ": " << danospersonagem1 << " pontos." << endl;
+                personagem1->adicionarDanoCausado(danospersonagem1);
+            }
+            else {
+                cout << "O ataque de " << personagem1->getNome() << " não causou dano a " << personagem2->getNome() << "." << endl;
+            }
+            if (danospersonagem2 > 0) {
+                personagem1->receberDano(danospersonagem2);
+                cout << "Perda de vida de " << personagem1->getNome() << ": " << danospersonagem2 << " pontos." << endl;
+                personagem2->adicionarDanoCausado(danospersonagem2);
+            }
+            else {
+                cout << "O ataque de " << personagem2->getNome() << " não causou dano a " << personagem1->getNome() << "." << endl;
+            }
+
+            if (personagem1->getPV() <= 0 || personagem2->getPV() <= 0) {
+                cout << "\n\t\tO combate terminou!\n" << endl;
+                break;
+            }
+            system("pause");
         }
-        else {
-            cout << "O ataque de " << personagem1->getNome() << " não causou dano a " << personagem2->getNome() << "." << endl;
-        }
-        if (danospersonagem2 > 0) {
-            personagem1->receberDano(danospersonagem2);
-            cout << "Perda de vida de " << personagem1->getNome() << ": " << danospersonagem2 << " pontos." << endl;
-            personagem2->adicionarDanoCausado(danospersonagem2);
-        }
-        else {
-            cout << "O ataque de " << personagem2->getNome() << " não causou dano a " << personagem1->getNome() << "." << endl;
-        }
 
-        if (personagem1->getPV() <= 0 || personagem2->getPV() <= 0) {
-            cout << "\n\t\tO combate terminou!\n" << endl;
-            break;
+        if (personagem1->getPV() <= 0 && personagem2->getPV() > 0) {
+            system("cls");
+            cout << "\t\t" << personagem1->getNome() << " perdeu!" << endl;
+            cout << "\t\t Game Over" << endl; 
+            system("pause"); 
+            exit(1); // Fecha o programa porque jogador perdeu
         }
-    }
-
-    if (personagem1->getPV() <= 0 && personagem2->getPV() > 0) {
-        cout << "\t\t" << personagem2->getNome() << " venceu!" << endl;
-    }
-    else if (personagem2->getPV() <= 0 && personagem1->getPV() > 0) {
-        cout << "\t\t" << personagem1->getNome() << " venceu!" << endl;
-    }
-    else {
-        int ataquePersonagem1 = personagem1->getPA();
-        int ataquePersonagem2 = personagem2->getPA();
-        int vidaPersonagem1 = personagem1->getPV();
-        int vidaPersonagem2 = personagem2->getPV();
-
-        if (ataquePersonagem1 > ataquePersonagem2) {
+        else if (personagem2->getPV() <= 0 && personagem1->getPV() > 0) {
+            system("cls");
             cout << "\t\t" << personagem1->getNome() << " venceu!" << endl;
-        }
-        else if (ataquePersonagem2 > ataquePersonagem1) {
-            cout << "\t\t" << personagem2->getNome() << " venceu!" << endl;
-        }
-        else {
-            cout << "\t" << "O combate terminou sem um vencedor claro!" << endl;
+            system("pause");
+            personagem1->resetarAtributos();  // Reabastecer pontos de vida
         }
     }
-}
-
-
 };
 
 class Bruxo : public Personagem { //causar dano e se curar com metade desse dano causado
@@ -272,16 +342,108 @@ Personagem* criarPersonagem() {
 }
 
 int main() {
+    // Definindo a codificação de caracteres para UTF-8
+    SetConsoleOutputCP(CP_UTF8);
     srand(static_cast<unsigned>(time(nullptr)));
 
-    Personagem* personagem1 = criarPersonagem();
-    Personagem* personagem2 = criarPersonagem();
-
+    //Criando o Jogo
     JogoRPG jogo;
-    jogo.iniciarCombate(personagem1, personagem2);
 
+    // Criando bosses usando as classes existentes
+    Personagem* boss1 = new Clerigo("Clerigo");
+    Personagem* boss2 = new Guerreiro("Guerreiro");
+    Personagem* boss3 = new Ladino("Ladino");
+    Personagem* boss4 = new Bruxo("Bruxo");
+
+    // Criando Personagem
+    Personagem* personagem1 = criarPersonagem();
+    
+    // Inicializando o mapa preenchendo todo o labirinto com '1'
+    vector<vector<char>> mapa(linhas, vector<char>(colunas, '1'));
+
+    // Adicionando borda superior e inferior
+    for (int j = 0; j < colunas; ++j) {
+        mapa[0][j] = mapa[linhas - 1][j] = '-';
+    }
+
+    // Adicionando borda esquerda e direita
+    for (int i = 1; i < linhas - 1; ++i) {
+        mapa[i][0] = mapa[i][colunas - 1] = '|';
+    }
+
+    // Adicionando entrada e saída
+    mapa[1][0] = 'E';
+    mapa[linhas - 2][colunas - 1] = 'S';
+
+    // Criando caminhos dentro do labirinto que não levam à saída
+    criarCaminhosExtras(mapa);
+
+    // Criando um caminho dentro do labirinto da entrada até a saída
+    criarCaminhoPrincipal(mapa);
+
+    int playerPosI = 1;
+    int playerPosJ = 1;
+
+while (true) {
+    system("cls");  // Limpar o terminal
+
+    imprimirMapa(mapa, playerPosI, playerPosJ);
+
+    // Capturar tecla de seta
+    int tecla = _getch();
+
+    // Mover o jogador
+    switch (tecla) {
+        case 72: // Tecla de seta para cima
+            if (playerPosI > 1 && mapa[playerPosI - 1][playerPosJ] != '1') {
+                playerPosI--;
+            }
+            break;
+        case 80: // Tecla de seta para baixo
+            if (playerPosI < linhas - 2 && mapa[playerPosI + 1][playerPosJ] != '1') {
+                playerPosI++;
+            }
+            break;
+        case 75: // Tecla de seta para a esquerda
+            if (playerPosJ > 1 && mapa[playerPosI][playerPosJ - 1] != '1') {
+                playerPosJ--;
+            }
+            break;
+        case 77: // Tecla de seta para a direita
+            if (playerPosJ < colunas - 2 && mapa[playerPosI][playerPosJ + 1] != '1') {
+                playerPosJ++;
+            }
+            break;
+        default:
+            break;
+    }
+
+    // Verificar se o jogador chegou à saída
+    if (playerPosI == linhas - 2 && playerPosJ == colunas - 2) {
+        cout << "Parabéns! Você saiu do labirinto e ganhou o jogo!" << endl;
+        break; // Encerrar o loop se o jogador venceu
+    }
+
+    // Combate contra Boss
+    if (playerPosI == 12 && playerPosJ == 1) { // Posição do Boss 1 (Clerigo)
+        system("cls");  // Limpar o terminal
+        jogo.iniciarCombate(personagem1, boss1);
+    } else if (playerPosI == 12 && playerPosJ == 11) { // Posição do Boss 2 (Guerreiro)
+        system("cls");  // Limpar o terminal
+        jogo.iniciarCombate(personagem1, boss2);
+    } else if (playerPosI == 12 && playerPosJ == 23) { // Posição do Boss 3 (Ladino)
+        system("cls");  // Limpar o terminal
+        jogo.iniciarCombate(personagem1, boss3);
+    } else if (playerPosI == 12 && playerPosJ == 33) { // Posição do Boss 4 (Bruxo)
+        system("cls");  // Limpar o terminal
+        jogo.iniciarCombate(personagem1, boss4);
+    }
+}
     delete personagem1;
-    delete personagem2;
+    delete boss1;
+    delete boss2;
+    delete boss3;
+    delete boss4;
 
     return 0;
 }
