@@ -11,7 +11,7 @@ using namespace std;
 
 
 // Booleanos para utilizar no if de combate contra Boss e Tesouros para não lutar contra o Boss novamente
-// Após já tê-los derrotado quando teclar o mesmo lugar 2x
+// Após já tê-los derrotado quando teclar o mesmo lugar mais de uma vez
 bool gu = true;
 bool cl = true;
 bool la = true;
@@ -103,12 +103,11 @@ class Personagem {
 protected:
     string nome, classe;
     int pv, pa, pd, pvOriginal, paOriginal;
-    int danoTotalCausado;
     std::vector<std::string> inventario;
 
 public:
     Personagem(const string& nome, const string& classe, int pv, int pa, int pd)
-        : nome(nome), classe(classe), pv(pv), pa(pa), pd(pd), danoTotalCausado(0), pvOriginal(pv), paOriginal(pa) {}
+        : nome(nome), classe(classe), pv(pv), pa(pa), pd(pd), pvOriginal(pv), paOriginal(pa) {}
 
     void receberDano(int dano) {
         if (dano > 0) {
@@ -171,12 +170,6 @@ public:
     void setPA(int novoPA){
         pa = novoPA;
     }
-
-    void adicionarDanoCausado(int dano) {
-        if (dano > 0) {
-            danoTotalCausado += dano;
-        }
-    }
 };
 
 
@@ -202,7 +195,6 @@ class JogoRPG {
             if (danospersonagem1 > 0) {
                 personagem2->receberDano(danospersonagem1);
                 cout << "Perda de vida de " << personagem2->getNome() << ": " << danospersonagem1 << " pontos." << endl;
-                personagem1->adicionarDanoCausado(danospersonagem1);
             }
             else {
                 cout << "O ataque de " << personagem1->getNome() << " não causou dano a " << personagem2->getNome() << "." << endl;
@@ -210,7 +202,6 @@ class JogoRPG {
             if (danospersonagem2 > 0) {
                 personagem1->receberDano(danospersonagem2);
                 cout << "Perda de vida de " << personagem1->getNome() << ": " << danospersonagem2 << " pontos." << endl;
-                personagem2->adicionarDanoCausado(danospersonagem2);
             }
             else {
                 cout << "O ataque de " << personagem2->getNome() << " não causou dano a " << personagem1->getNome() << "." << endl;
@@ -476,7 +467,7 @@ while (true) {
         break; // Encerrar o loop se o jogador venceu    
     }
 
-    // Combate contra Boss
+    // Tesouros escondidos
     if (playerPosI == 22 && playerPosJ == 1 && (relo == true)) { // Tesouro Relógio Dourado
         if(relo){
             system("cls");
@@ -581,6 +572,7 @@ while (true) {
         }
     }
 
+    // Combate contra Boss
     if (playerPosI == 12 && playerPosJ == 1 && (cl == true)) { // Posição do Boss 1 (Clerigo)
         system("cls");  // Limpar o terminal
         jogo.iniciarCombate(personagem1, boss1);
