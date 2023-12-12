@@ -9,8 +9,13 @@
 
 using namespace std;
 
+
+// Booleanos para utilizar no if de combate contra Boss para não lutar contra o Boss novamente
+// Após já tê-los derrotado
 bool gu = true;
 bool cl = true;
+bool la = true;
+bool br = true;
 
 // Definindo o tamanho do mapa
 const int linhas = 24;
@@ -148,12 +153,16 @@ public:
     }
 
     void setPV(int novoPV) {
-    pvOriginal = novoPV;
-    pv = pvOriginal;
+        pvOriginal = novoPV;
+        pv = pvOriginal;
     }
 
     void setPD(int novoPD) {
-    pd = novoPD;
+        pd = novoPD;
+    }
+
+    void setPA(int novoPA){
+        pa = novoPA;
     }
 
     void adicionarDanoCausado(int dano) {
@@ -335,7 +344,7 @@ private:
     }
 
     int gerarPA() {
-        return rand() % (35 - 25 + 1) + 25;
+        return rand() % (25 - 15 + 1) + 15;
     }
 
     int gerarPD() {
@@ -448,6 +457,11 @@ while (true) {
 
     // Verificar se o jogador chegou à saída
     if (playerPosI == linhas - 2 && playerPosJ == colunas - 2) {
+        system("cls");
+        cout << "Você pega a Chave Misteriosa do seu inventário..." << endl << endl;
+        cout << "Coloca na tranca..." << endl << endl;
+        cout << "Roda a maçaneta..." << endl << endl;
+        cout << "A porta se abre" << endl << endl;
         cout << "Parabéns! Você saiu do labirinto e ganhou o jogo!" << endl;
         break; // Encerrar o loop se o jogador venceu
     }
@@ -456,7 +470,6 @@ while (true) {
     if (playerPosI == 12 && playerPosJ == 1 && (cl == true)) { // Posição do Boss 1 (Clerigo)
         system("cls");  // Limpar o terminal
         jogo.iniciarCombate(personagem1, boss1);
-        system("cls");
         cout << "Você derrotou o Clerigo e ganhou uma Poção de Vigor!" << endl << endl;
         system("pause");
         personagem1->adicionarAoInventario("Poção de Vigor");
@@ -469,7 +482,6 @@ while (true) {
         } if (playerPosI == 12 && playerPosJ == 11 && (gu == true)) { // Posição do Boss 2 (Guerreiro)
         system("cls");  // Limpar o terminal
         jogo.iniciarCombate(personagem1, boss2);
-        system("cls");
         cout << "Você derrotou o Guerreiro e ganhou uma Armadura!" << endl << endl;
         system("pause");
         personagem1->adicionarAoInventario("Armadura");
@@ -480,12 +492,24 @@ while (true) {
             gu = false;
             system("pause");
         }
-    } else if (playerPosI == 12 && playerPosJ == 23) { // Posição do Boss 3 (Ladino)
+    } else if (playerPosI == 12 && playerPosJ == 23 && (la == true)) { // Posição do Boss 3 (Ladino)
         system("cls");  // Limpar o terminal
         jogo.iniciarCombate(personagem1, boss3);
-    } else if (playerPosI == 12 && playerPosJ == 33) { // Posição do Boss 4 (Bruxo)
+        cout << "Você derrotou o Ladino e ganhou uma Adaga!" << endl << endl;
+        system("pause");
+        personagem1->adicionarAoInventario("Adaga");
+        personagem1->setPA(personagem1->getPA() + 2); // Aumentando ataque
+        cout << endl << "Agora você possui " << personagem1->getPA() << " pontos de ataque" << endl;
+        la = false;
+        system("pause");
+        
+    } else if (playerPosI == 12 && playerPosJ == 33 && (br == true)) { // Posição do Boss 4 (Bruxo)
         system("cls");  // Limpar o terminal
         jogo.iniciarCombate(personagem1, boss4);
+        cout << "Você derrotou o Bruxo e ganhou uma Chave Misteriosa!" << endl << endl;
+        personagem1->adicionarAoInventario("Chave Misteriosa");
+        br = false;
+        system("pause");
     }
 }
     delete personagem1;
