@@ -144,6 +144,9 @@ public:
         return pd;
     }
 
+    void setPV(int novoPV) {
+    pv = novoPV;
+    }
     void adicionarDanoCausado(int dano) {
         if (dano > 0) {
             danoTotalCausado += dano;
@@ -444,6 +447,15 @@ while (true) {
     if (playerPosI == 12 && playerPosJ == 1) { // Posição do Boss 1 (Clerigo)
         system("cls");  // Limpar o terminal
         jogo.iniciarCombate(personagem1, boss1);
+        system("cls");
+        cout << "Você derrotou o Clerigo e ganhou uma Poção de Vigor!" << endl << endl;
+        system("pause");
+        personagem1->adicionarAoInventario("Poção de Vigor");
+
+        personagem1->setPV(personagem1->getPV() + 10); // Aumentando pontos de vida
+        cout << endl << "Agora você possui " << personagem1->getPV() << " pontos de vida " << endl;
+        system("pause");
+
     } else if (playerPosI == 12 && playerPosJ == 11) { // Posição do Boss 2 (Guerreiro)
         system("cls");  // Limpar o terminal
         jogo.iniciarCombate(personagem1, boss2);
