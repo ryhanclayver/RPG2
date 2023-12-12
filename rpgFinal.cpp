@@ -9,6 +9,9 @@
 
 using namespace std;
 
+bool gu = true;
+bool cl = true;
+
 // Definindo o tamanho do mapa
 const int linhas = 24;
 const int colunas = 36;
@@ -145,8 +148,14 @@ public:
     }
 
     void setPV(int novoPV) {
-    pv = novoPV;
+    pvOriginal = novoPV;
+    pv = pvOriginal;
     }
+
+    void setPD(int novoPD) {
+    pd = novoPD;
+    }
+
     void adicionarDanoCausado(int dano) {
         if (dano > 0) {
             danoTotalCausado += dano;
@@ -166,8 +175,8 @@ class JogoRPG {
 
         while (personagem1->getPV() > 0 && personagem2->getPV() > 0) {
             cout << "\t\nRound: " << rounds + 1 << endl;
-            cout << "Vida de "<< personagem1->getNome()<<" :" << personagem1->getPV() << " pontos." << endl;
-            cout << "Vida de "<< personagem2->getNome()<<" :" << personagem2->getPV() << " pontos." << endl;
+            cout << "Vida de "<< personagem1->getNome()<<": " << personagem1->getPV() << " pontos." << endl;
+            cout << "Vida de "<< personagem2->getNome()<<": " << personagem2->getPV() << " pontos." << endl;
             cout << endl;
             rounds++;
 
@@ -444,7 +453,7 @@ while (true) {
     }
 
     // Combate contra Boss
-    if (playerPosI == 12 && playerPosJ == 1) { // Posição do Boss 1 (Clerigo)
+    if (playerPosI == 12 && playerPosJ == 1 && (cl == true)) { // Posição do Boss 1 (Clerigo)
         system("cls");  // Limpar o terminal
         jogo.iniciarCombate(personagem1, boss1);
         system("cls");
@@ -454,11 +463,23 @@ while (true) {
 
         personagem1->setPV(personagem1->getPV() + 10); // Aumentando pontos de vida
         cout << endl << "Agora você possui " << personagem1->getPV() << " pontos de vida " << endl;
+        cl = false;
         system("pause");
 
-    } else if (playerPosI == 12 && playerPosJ == 11) { // Posição do Boss 2 (Guerreiro)
+        } if (playerPosI == 12 && playerPosJ == 11 && (gu == true)) { // Posição do Boss 2 (Guerreiro)
         system("cls");  // Limpar o terminal
         jogo.iniciarCombate(personagem1, boss2);
+        system("cls");
+        cout << "Você derrotou o Guerreiro e ganhou uma Armadura!" << endl << endl;
+        system("pause");
+        personagem1->adicionarAoInventario("Armadura");
+
+        if (gu) {  // Certifica-se de adicionar a armadura apenas uma vez
+            personagem1->setPD(personagem1->getPD() + 2); // Aumentando armadura
+            cout << endl << "Agora você possui " << personagem1->getPD() << " pontos de defesa" << endl;
+            gu = false;
+            system("pause");
+        }
     } else if (playerPosI == 12 && playerPosJ == 23) { // Posição do Boss 3 (Ladino)
         system("cls");  // Limpar o terminal
         jogo.iniciarCombate(personagem1, boss3);
