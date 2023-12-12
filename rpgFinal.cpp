@@ -127,11 +127,11 @@ public:
         if (inventario.empty()) {
             std::cout << "O inventário está vazio." << std::endl;
         }else {
-            cout << "Você encontrou " << inventario.size() <<"/10 dos itens disponíveis" << endl;
             std::cout << "Você vê:" << std::endl;
             for (const auto& item : inventario) {
                 std::cout << "- " << item << std::endl;
             } 
+            cout << "Você encontrou " << inventario.size() <<"/10 dos itens disponíveis" << endl;
         }
     }
 
