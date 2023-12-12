@@ -10,12 +10,18 @@
 using namespace std;
 
 
-// Booleanos para utilizar no if de combate contra Boss para não lutar contra o Boss novamente
-// Após já tê-los derrotado
+// Booleanos para utilizar no if de combate contra Boss e Tesouros para não lutar contra o Boss novamente
+// Após já tê-los derrotado quando teclar o mesmo lugar 2x
 bool gu = true;
 bool cl = true;
 bool la = true;
 bool br = true;
+bool relo = true;
+bool anel = true;
+bool capa = true;
+bool elmo = true;
+bool colar = true;
+bool luvas = true;
 
 // Definindo o tamanho do mapa
 const int linhas = 24;
@@ -120,11 +126,12 @@ public:
     void exibirInventario() const {
         if (inventario.empty()) {
             std::cout << "O inventário está vazio." << std::endl;
-        } else {
-            std::cout << "Inventário:" << std::endl;
+        }else {
+            cout << "Você encontrou " << inventario.size() <<"/10 dos itens disponíveis" << endl;
+            std::cout << "Você vê:" << std::endl;
             for (const auto& item : inventario) {
                 std::cout << "- " << item << std::endl;
-            }
+            } 
         }
     }
 
@@ -458,15 +465,122 @@ while (true) {
     // Verificar se o jogador chegou à saída
     if (playerPosI == linhas - 2 && playerPosJ == colunas - 2) {
         system("cls");
+        cout << "Você encontra uma porta fechada..." << endl << endl;
+        cout << "Olha para seu inventário procurando algo..." << endl << endl;
+        personagem1->exibirInventario();
         cout << "Você pega a Chave Misteriosa do seu inventário..." << endl << endl;
         cout << "Coloca na tranca..." << endl << endl;
         cout << "Roda a maçaneta..." << endl << endl;
-        cout << "A porta se abre" << endl << endl;
+        cout << "A porta se abre" << endl << endl;       
         cout << "Parabéns! Você saiu do labirinto e ganhou o jogo!" << endl;
-        break; // Encerrar o loop se o jogador venceu
+        break; // Encerrar o loop se o jogador venceu    
     }
 
     // Combate contra Boss
+    if (playerPosI == 22 && playerPosJ == 1 && (relo == true)) { // Tesouro Relógio Dourado
+        if(relo){
+            system("cls");
+            cout << "Você encontra algo no chão..." << endl << endl;
+            cout << "Começa a cavar..." << endl << endl;
+            cout << "Encontra um baú destrancado..." << endl << endl;
+            cout << "Dentro dele tem um Relógio Dourado com escritas em latim..." << endl << endl;
+            cout << "Você pega esse relógio..." << endl << endl;
+            personagem1->adicionarAoInventario("Relógio Dourado");
+            cout << "Ele deixa o tempo mais lento..." << endl << endl;
+            cout << "Você ganha 1 ponto de defesa..." << endl << endl;
+            personagem1->setPD(personagem1->getPD() + 1); // Aumentando armadura
+            cout << endl << "Agora você possui " << personagem1->getPD() << " pontos de defesa" << endl;
+            relo = false;
+            system("pause");
+        }
+    }
+
+        if (playerPosI == 1 && playerPosJ == 12 && (anel == true)) { // Tesouro anel
+        if(anel){
+            system("cls");
+            cout << "Você encontra um corpo no chão..." << endl << endl;
+            cout << "Algo brilha nas mãos desse corpo moribundo..." << endl << endl;
+            cout << "Você vê que é um anel..." << endl << endl;
+            cout << "Um anel que possui uma jóia prata envolto de adornos avermelhados..." << endl << endl;
+            cout << "Você pega esse anel..." << endl << endl;
+            personagem1->adicionarAoInventario("Anel");
+            cout << "Ele te deixa mais forte, por algum motivo..." << endl << endl;
+            cout << "Você ganha 1 ponto de vida e de ataque..." << endl << endl;
+            personagem1->setPV(personagem1->getPV() + 1); // Aumentando vida
+            personagem1->setPA(personagem1->getPA() + 1); // Aumentando ataque
+            cout << endl << "Agora você possui " << personagem1->getPV() << " pontos de vida ";
+            cout << "e " << personagem1->getPA() << " pontos de ataque" << endl;
+            anel = false;
+            system("pause");
+        }
+    }
+
+            if (playerPosI == 1 && playerPosJ == 34 && (capa == true)) {  // Tesouro capa
+        if(capa){
+            system("cls");
+            cout << "Você encontra uma capa amassada..." << endl << endl;
+            cout << "Ela emana uma aura esquisita..." << endl << endl;
+            cout << "Você a veste..." << endl << endl;
+            personagem1->adicionarAoInventario("Capa Esquisita");
+            cout << "Ele te deixa mais resistente, por algum motivo..." << endl << endl;
+            cout << "Você ganha 1 ponto de defesa..." << endl << endl;
+            personagem1->setPD(personagem1->getPD() + 1); // Aumentando defesa
+            cout << endl << "Agora você possui " << personagem1->getPD() << " pontos de defesa" << endl;
+            capa = false;
+            system("pause");
+        }
+    }
+
+    if (playerPosI == 9 && playerPosJ == 24 && (elmo == true)) {  // Tesouro elmo
+        if(elmo){
+            system("cls");
+            cout << "Você encontra um elmo meio enferrujado..." << endl << endl;
+            cout << "Ele ainda parece ser util..." << endl << endl;
+            cout << "Você o veste..." << endl << endl;
+            personagem1->adicionarAoInventario("Elmo Enferrujado");
+            cout << "Ele te deixa mais protegido..." << endl << endl;
+            cout << "Você ganha 1 ponto de defesa..." << endl << endl;
+            personagem1->setPD(personagem1->getPD() + 1); // Aumentando defesa
+            cout << endl << "Agora você possui " << personagem1->getPD() << " pontos de defesa" << endl;
+            elmo = false;
+            system("pause");
+        }
+    }
+
+        if (playerPosI == 16 && playerPosJ == 12 && (colar == true)) {  // Tesouro colar
+        if(colar){
+            system("cls");
+            cout << "Você encontra um colar..." << endl << endl;
+            cout << "Ele emana um brilho sutil esmeralda..." << endl << endl;
+            cout << "Você o veste..." << 
+            endl << endl;
+            personagem1->adicionarAoInventario("Colar Esmeralda");
+            cout << "Ele te deixa mais vigoroso..." << endl << endl;
+            cout << "Você ganha 1 ponto de vida..." << endl << endl;
+            personagem1->setPV(personagem1->getPV() + 1); // Aumentando vida
+            cout << endl << "Agora você possui " << personagem1->getPV() << " pontos de vida" << endl;
+            colar = false;
+            system("pause");
+        }
+    }
+
+        if (playerPosI == 16 && playerPosJ == 23 && (luvas == true)) {  // Tesouro luvas
+        if(luvas){
+            system("cls");
+            cout << "Você vê um par de Luvas caídas no chão..." << endl << endl;
+            cout << "Elas parecem ser melhores que as suas..." << endl << endl;
+            cout << "Você as coloca..." << 
+            endl << endl;
+            personagem1->adicionarAoInventario("Luvas");
+            cout << "Ela te deixa mais forte..." << endl << endl;
+            cout << "Você ganha 1 ponto de ataque..." << endl << endl;
+            personagem1->setPA(personagem1->getPA() + 1); // Aumentando ataque
+            cout << endl << "Agora você possui " << personagem1->getPA() << " pontos de ataque" << endl;
+            luvas = false;
+            system("pause");
+        }
+    }
+
     if (playerPosI == 12 && playerPosJ == 1 && (cl == true)) { // Posição do Boss 1 (Clerigo)
         system("cls");  // Limpar o terminal
         jogo.iniciarCombate(personagem1, boss1);
