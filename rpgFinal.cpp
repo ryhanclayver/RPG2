@@ -11,7 +11,7 @@ using namespace std;
 
 
 // Booleanos para utilizar no if de combate contra Boss e Tesouros para não lutar contra o Boss novamente
-// Após já tê-los derrotado quando teclar o mesmo lugar mais de uma vez
+// Após já tê-los derrotado quando teclar o mesmo lugar mais de uma vez - variaveis de controle
 bool gu = true;
 bool cl = true;
 bool la = true;
@@ -27,7 +27,7 @@ bool luvas = true;
 const int linhas = 24;
 const int colunas = 36;
 
-// Função para imprimir o mapa
+// Função para imprimir o mapa - matriz de caracter 
 void imprimirMapa(const vector<vector<char>>& mapa, int playerPosI, int playerPosJ) {
     system("cls");
 
@@ -174,7 +174,6 @@ public:
 
 
 class JogoRPG {
-    protected:
 
     public:
         JogoRPG() {}
